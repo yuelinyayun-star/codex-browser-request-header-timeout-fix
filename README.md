@@ -16,6 +16,8 @@ not settle, unrelated browser RPC calls such as `openTabs()` are blocked too.
 This repository contains a narrowly scoped local workaround. It does **not**
 contain or redistribute OpenAI's bundled runtime.
 
+Upstream report: [openai/codex#45014](https://github.com/openai/codex/issues/45014)
+
 ## Tested environment
 
 - Codex Desktop `26.903.9818.0`
