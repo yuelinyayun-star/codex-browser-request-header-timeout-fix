@@ -1,0 +1,31 @@
+--- a/browser-service-source.js
++++ b/browser-service-source.js
+@@
+-async function shouldUseAgentRequestHeader() {
+-  if (callerIdentityPromise == null) {
+-    throw new Error("Browser request-header policy requires caller identity.");
+-  }
+-  await callerIdentityPromise;
+-  return readPolicy("codex_browser_use_agent_request_header");
+-}
++let requestHeaderPolicyPromise;
++
++async function shouldUseAgentRequestHeader() {
++  return requestHeaderPolicyPromise ??= (async () => {
++    if (callerIdentityPromise == null) return false;
++
++    try {
++      return await Promise.race([
++        callerIdentityPromise.then(() =>
++          readPolicy("codex_browser_use_agent_request_header")
++        ),
++        new Promise((resolve) => setTimeout(() => resolve(false), 2500)),
++      ]);
++    } catch {
++      return false;
++    }
++  })();
++}
+
+# This is a readable conceptual diff, not a patch against a redistributed
+# OpenAI source file. The PowerShell installer matches the tested bundled form.
